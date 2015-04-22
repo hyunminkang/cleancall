@@ -1,0 +1,59 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Cwd;
+use FindBin;
+use lib "$FindBin::Bin";
+use wGetOptions qw(wpod2usage wGetOptions);
+
+my $out = "";
+my $index = "";
+
+wGetOptions("-Merge cctools-verify outputs to create a PED file",
+	    "--Required Options",
+	    "index=s", [\$index,"Index file containing sample IDs and MPU (mpileup) file path"],
+	    "out=s", [\$out,"Output PED file to produce"],
+    ) || wpod2usage(2);
+
+unless ( ( $index ) && ( $out ) ) {
+    print STDERR "ERROR: Missing required option\n";
+    wpod2usage(2);
+}
+
+my @ids = ();
+my @mpus = ();
+open(IN,$index) || die "Cannot open file\n";
+while(<IN>) {
+    next if ( /^#/ );
+    my @F = split;
+    if ( $#F == 1 ) {
+	push(@ids,$F[0]);
+	push(@mpus,$F[1]);
+    }
+    elsif ( $#F == 5 ) {
+	push(@ids,$F[1]);
+	push(@mpus,$F[$#F]);
+    }
+    else {
+	die "Expected number of columns are 2 or 5\n";
+    }
+}
+close IN;
+
+my @fmixs = ();
+my @cmixs = ();
+for(my $i=0; $i < @ids; ++$i) {
+    open(IN,"$out.$ids[$i].selfSM") || die "Cannot open file\n";
+    my $line = <IN>;
+    my @F = split(/[\t\r\n]/,<IN>);
+    push(@fmixs,$F[6]);
+    push(@cmixs,$F[11]);
+    close IN;
+}
+
+open(OUT,">$out.ped") || die "Cannot open file\n";
+print OUT "#FAM_ID\tIND_ID\tFAT_ID\tMOT_ID\tSEX\tMPU\tFREEMIX\tCHIPMIX\n";
+for(my $i=0; $i < @ids; ++$i) {
+    print OUT "$ids[$i]\t$ids[$i]\t0\t0\t0\t$mpus[$i]\t$fmixs[$i]\t$cmixs[$i]\n";
+}
+close OUT;

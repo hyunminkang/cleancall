@@ -1,0 +1,215 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Cwd;
+use FindBin;
+use lib "$FindBin::Bin";
+use wGetOptions qw(wpod2usage wGetOptions);
+
+my $ped = "";
+my $ref = ""; #/data/local/ref/karma.ref/human.g1k.v37.fa";
+my $out = "";
+my $invcf = "";
+my $colmpu = "MPU";
+my $colcon = "";
+my $colpair = "";
+my $chunkmb = 20;
+my $run = -1;
+my $restart = "";
+my $chrom = "";
+my $thresContam = 0;
+my $defaultContam = 0;
+my $scaleContam = 1;
+my $offsetContam = 0;
+my $mosixNodes = "";
+my $ignoreFilter = "";
+my $printMono = "";
+my $tmpdir = "";
+
+## Parse options and print usage if there is a syntax error,
+## or if usage was explicitly requested.
+wGetOptions("-Contamination-aware genotyping from mpileups",
+	    "--Required Options",
+	    "invcf=s" => [\$invcf, "Input VCF indicating sites to genotype"],
+	    "ped=s" => [\$ped, "PED file containing individual ID and mpileup (MPU) file path"],
+	    "out=s" => [\$out, "Output VCF file name (or prefix)"],
+	    "ref=s" => [\$ref, "Reference FASTA file"],
+	    "--Additional Options",
+	    "col-mpu=s", [\$colmpu, "Column name in PED file that indicates the mpileup file path"],
+	    "col-con=s", [\$colcon, "Column name in PED file that indicates the estimated contamination level"],
+	   "col-pair=s", [\$colpair, "Column name in PED file that indicated the known pair information of contaminating sample (if exists)"],
+	    "thres-con=f", [\$thresContam, "Threshold to ignore low level contamination. Contamination less than this threshold will be considered as uncontaminated data"],
+	   "default-con=f", [\$defaultContam, "Default contamination level to assign uncontaminated sample. Samples with less than this contamination level will be considered as contaminated with specified level"],
+	   "scale-con=f", [\$scaleContam, "Multiplier to the estimated contamination level"],
+	   "offset-con=f",[\$offsetContam, "Offset to add to the estimated contamination level"],
+	   "chunk-mb=f", [\$chunkmb,"Chunk the genome with a paticular size for facilitating parallelized genotyping"],
+	   "mosix-nodes=s", [\$mosixNodes,"MOSIX nodes to submit jobs to"],
+	   "chr=s", [\$chrom,"Specify a particular chromosome to genotype"],
+	   "run=i", [\$run,"Number of jobs to run in parallel"],
+	   "restart", [\$restart,"Restart the genotyping jobs instead of resuming from the previous checkpoint"],
+	   "ignore-filter", [\$ignoreFilter,"Included non-PASS sites in the input VCF when genotyping"],
+	   "print-mono", [\$printMono,"Output monomorphic variants"],
+	   "tmpdir=s", [\$tmpdir,"Directory to store temporary files"],
+    ) || wpod2usage(2);
+
+my $bindir = "$FindBin::Bin";
+
+unless ( ( $invcf ) && ( $ped ) && ( $out ) && ( $ref) ) {
+    print STDERR "ERROR: Missing required option\n";
+    wpod2usage(2);
+}
+
+die "Cannot open $invcf for reading\n" unless ( -s $invcf );
+
+my %hChrSizes = ();
+open(IN,"$ref.fai") || die "Cannot open $ref.fai file for reading";
+while(<IN>) {
+    my ($chr,$len) = split;
+    $hChrSizes{$chr} = $len;
+}
+close IN;
+
+$out =~ s/.vcf$//;
+$out =~ s/.vcf.gz$//;
+
+my @chrs = ($chrom) ? ($chrom) : (1..22,"X","Y");
+my @regs = ();
+my @mfxs = ();
+my @vcfs = ();
+foreach my $chr (@chrs) {
+    for(my $i=1; $i <= $hChrSizes{$chr}; $i += $chunkmb*1000000) {
+	my $end = ($i+$chunkmb*1000000-1);
+	$end = $hChrSizes{$chr} if ( $end > $hChrSizes{$chr} );
+	my $reg = "$chr:$i-$end";
+	my $mfx = "$chr.$i.$end";
+	push(@regs,$reg);
+	push(@mfxs,$mfx);
+	push(@vcfs,"$out.$mfx.vcf.gz");
+    }
+}
+
+## Read PED file
+my @peds = ();
+my @mpus = ();
+my $icolmpu = -1;
+if ( $tmpdir ) {
+    open(PED,"$ped") || die "Cannot open $ped\n";
+    while(<PED>) {
+	my @F = split;
+	if ( $#peds < 0 ) {
+	    for(my $i=5; $i < @F; ++$i) {
+		$icolmpu = $i if ( $F[$i] eq $colmpu );
+	    }
+	}
+	push(@peds,\@F);
+	push(@mpus,$F[$icolmpu]);
+    }
+    close PED;
+    die "Cannot find $colmpu column in $ped" if ( $icolmpu < 0 );
+}
+
+open(MAK,">$out.Makefile") || die "Cannot open file\n";
+print MAK ".DELETE_ON_ERROR:\n\n";
+print MAK "all: $out.vcf.gz.tbi\n\n";
+print MAK "$out.vcf.gz.tbi: ".join(".tbi ",@vcfs).".tbi\n";
+print MAK "\ttouch $out.empty.txt\n";
+print MAK "\t(cat $vcfs[0]";
+for(my $i=1; $i < @vcfs; ++$i) {
+    print MAK "; tabix -r $out.empty.txt $vcfs[$i]";
+}
+print MAK ") > $out.vcf.gz\n";
+#print MAK "\t(zcat $vcfs[0] | head -100 | grep ^#; zcat @vcfs | grep -v ^#;) | $bindir/bgzip -c > $out.vcf.gz\n";
+print MAK "\t$bindir/tabix -pvcf $out.vcf.gz\n";
+print MAK "\tzcat $out.vcf.gz | cut -f 1-8 | $bindir/bgzip -c > $out.sites.vcf.gz\n\n";
+print MAK "\trm @vcfs ".join(".tbi ",@vcfs).".tbi $out.empty.txt\n";
+print MAK "\t$bindir/tabix -pvcf $out.sites.vcf.gz\n\n";
+#my @mosNodes = split(/,/,$mosixNodes);
+#my $nMosNodes = $#mosNodes+1;
+for(my $i=0; $i < @vcfs; ++$i) {
+    #my $mosNode = $mosNodes[$i % $nMosNodes] if ( $mosixNodes );
+    print MAK "$vcfs[$i].tbi:\n";
+    if ( $tmpdir ) {
+	## write new PED file
+	##&forkExecWait("mkdir --p $tmpdir/$mfxs[$i]");
+	#my $cmd = "mkdir --p $tmpdir/$mfxs[$i]";
+	#$cmd = "mosbatch -E/tmp -r$mosNode sh -c '$cmd'" if ( $mosixNodes );
+	#print MAK "\t$cmd\n";
+
+	open(OUT,">$out.$mfxs[$i].ped");
+	open(SH,">$out.$mfxs[$i].sh");
+	print SH "mkdir --p $tmpdir/$mfxs[$i]\n";
+	for(my $j=0; $j < @peds; ++$j) {
+	    if ( $j > 0 ) {
+		$peds[$j]->[$icolmpu] = "$tmpdir/$mfxs[$i]/".($peds[$j]->[1]).".mpu.gz";
+		#my $cmd = "$bindir/tabix $mpus[$j] $regs[$i] > $tmpdir/$mfxs[$i]/".($peds[$j]->[1]).".mpu";
+		my $cmd = "$bindir/tabix $mpus[$j] $regs[$i] | gzip -c > $tmpdir/$mfxs[$i]/".($peds[$j]->[1]).".mpu.gz";
+		print SH "$cmd\n";
+		#$cmd = "mosbatch -E/tmp -r$mosNode sh -c '$cmd'" if ( $mosixNodes );
+		#print MAK "\t$cmd\n";
+	    }
+	    print OUT join("\t",@{$peds[$j]})."\n";
+	}
+	close OUT;
+	my $cmd = "$bindir/cleanCall genotype --default-contam $defaultContam --invcf $invcf --region $regs[$i] --ped $out.$mfxs[$i].ped --col-mpu $colmpu ".($colpair ? "--col-mixid $colpair " : "").($colcon ? "--col-con $colcon " : "").($thresContam > 0 ? "--thres-contam $thresContam " : "").($defaultContam > 0 ? "--default-contam $defaultContam " : "").($scaleContam != 1 ? "--scale-contam $scaleContam " : "").($offsetContam > 0 ? "--offset-contam $offsetContam " : "").($ignoreFilter ? "--ignoreFilter " : "").($printMono ? "--print-mono " : "")."--out $vcfs[$i]";
+	print STDERR "PrintMono!\n" if ( $printMono);
+	print SH "$cmd\n";
+	#$cmd = "mosbatch -E/tmp -r$mosNode sh -c '$cmd'" if ( $mosixNodes );
+	#print MAK "\t$cmd\n";
+	#print MAK "\trm -rf $tmpdir/$mfxs[$i]/\n";
+	#print MAK "\t$bindir/tabix -pvcf $vcfs[$i]\n\n";
+	print SH "rm -rf $tmpdir/$mfxs[$i]/\n";
+	print SH "$bindir/tabix -pvcf $vcfs[$i]\n";
+	close SH;
+	if ( $mosixNodes ) {
+	    $cmd = "mosbatch -E/tmp -j$mosixNodes sh $out.$mfxs[$i].sh";
+	}
+	else {
+	    $cmd = "sh $out.$mfxs[$i].sh";
+	}
+	print MAK "\t$cmd\n\n";
+    }
+    else {
+	my $cmd = "$bindir/cleanCall genotype --default-contam $defaultContam --invcf $invcf --region $regs[$i] --ped $ped --col-mpu $colmpu ".($colpair ? "--col-mixid $colpair " : "").($colcon ? "--col-con $colcon " : "").($thresContam > 0 ? "--thres-contam $thresContam " : "").($defaultContam > 0 ? "--default-contam $defaultContam " : "").($scaleContam != 1 ? "--scale-contam $scaleContam " : "").($offsetContam > 0 ? "--offset-contam $offsetContam " : "").($ignoreFilter ? "--ignoreFilter " : "").($printMono ? "--print-mono " : "")."--out $vcfs[$i]";
+	#$cmd = "mosbatch -E/tmp -r$mosNode sh -c '$cmd'" if ( $mosixNodes );
+	$cmd = "mosbatch -E/tmp -j$mosixNodes sh -c '$cmd'" if ( $mosixNodes );
+	print MAK "\t$cmd\n";
+	print MAK "\t$bindir/tabix -pvcf $vcfs[$i]\n\n";
+    }
+}
+close MAK;
+
+print "Finished generating CCTOOLS Makefile\n";
+if ( $run < 0 ) {
+    print "CCTOOLS will run the with the following commond:\n";
+    print "\tmake -f $out.Makefile -j [# of parallel jobs]\n";
+    print "Or perform sanity checking using the following command:\n";
+    print "\tmake -f $out.Makefile -n\n";
+}
+elsif ( $run == 0 ) {
+    print "Running maximum parallel jobs of CAPT\n";
+    my $cmd = "make -f $out.Makefile -j ".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
+else {
+    print "Running $run parallel jobs of CCTOOLS\n";
+    my $cmd = "make -f $out.Makefile -j $run".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
+
+sub forkExecWait {
+    my $cmd = shift;
+    print "forkExecWait(): $cmd\n";
+    my $kidpid;
+    if ( !defined($kidpid = fork()) ) {
+	die "Cannot fork: $!";
+    }
+    elsif ( $kidpid == 0 ) {
+	exec($cmd);
+	die "Cannot exec $cmd: $!";
+    }
+    else {
+	waitpid($kidpid,0);
+    }
+}

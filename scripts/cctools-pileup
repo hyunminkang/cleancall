@@ -1,0 +1,146 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Cwd;
+use FindBin;
+use lib "$FindBin::Bin";
+use wGetOptions qw(wpod2usage wGetOptions);
+
+my $bindir = "$FindBin::Bin";
+my $index = "";
+my $out = "";
+my $loci = "";
+my $ref = "/data/local/ref/karma.ref/human.g1k.v37.fa";
+my $maxDepth = 255;
+my $ignoreMQ = "";
+my $ignoreCycle = "";
+my $run = -1;
+my $restart = "";
+my $samtools = "samtools";
+my $bamutil = "bam";
+my $tabix = "$bindir/tabix";
+my $bgzip = "$bindir/bgzip";
+my $mosixNodes = "";
+my $viewParam = "-q 20 -F 0x0704";
+my $baqParam = "-AEbr";
+my $region = "";
+my $clipOverlap = "";
+
+## Parse options and print usage if there is a syntax error,
+## or if usage was explicitly requested.
+wGetOptions("-Perform pileup for contamination-aware genotyping",
+	    "--Required Options",
+	    "loci=s" => [\$loci, "Input genomic position to perform pileup"],
+	    "index=s" => [\$index,"Index file containing sample IDs and BAM file path"],
+	    "out=s" => [\$out,"Output prefix"],
+	    "ref=s" => [\$ref, "Reference FASTQ file"],
+	    "--Additional Options",
+	    "max-depth=i" => [\$maxDepth, "Maximum depth to pile up"],
+	    "ignore-MQ", [\$ignoreMQ, "Do not report mapping quality"],
+	    "ignore-cycle", [\$ignoreCycle, "Do not report the read cycle"],
+	    "samtools=s", [\$samtools, "The full path of samtools binary"],
+	    "bamutil=s", [\$bamutil, "The full path of bamUtil binary"],
+	    "mosix-nodes=s",[\$mosixNodes,"Comma separated list of mosix nodes"],
+	    "view-param=s", [\$viewParam,"Parameter for samtools view"],
+	    "baq-param=s",[\$baqParam,"Parameter for samtools calmd (for BAQ)"],
+	    "region=s",[\$region,"Genomic regions to focus on in chr:beg-end format"],
+	    "run=i",[\$run,"Number of jobs to run in parallel"],
+	    "restart",[\$restart,"Restart jobs ignoring previous outputs"],
+	    "clip-overlap",[\$clipOverlap,"Perform clipOverlap during pileup"],
+    ) || wpod2usage(2);
+
+
+unless ( ( $loci ) && ($ref ) && ( $index ) && ( $out ) ) {
+    print STDERR "ERROR: Missing required option\n";
+    wpod2usage(2);
+}
+
+
+if ( ( $clipOverlap ) && ( &checkBinary($bamutil) == 0 ) ) {
+    print STDERR "ERROR: bamUtil binary $bamutil cannot be found\n";
+    wpod2usage(2);    
+}
+
+if ( &checkBinary($samtools) == 0 ) {
+    print STDERR "ERROR: samtools binary $samtools cannot be found\n";
+    wpod2usage(2);        
+}
+
+unless ( ( -s $ref ) && ( -s "$ref.fai" ) ) {
+    print STDERR "ERROR: The reference sequence $ref or its index is not found\n";
+    wpod2usage(2);            
+}
+
+my @ids = ();
+my @bams = ();
+my $icut = 1;
+open(IN,$index) || die "Cannot open index file $index\n";
+while(<IN>) {
+    next if ( /^#/ );
+    my @F = split;
+    if ( $#F == 1 ) {
+	push(@ids,$F[0]);
+	push(@bams,$F[1]);
+    }
+    elsif ( $#F == 5 ) {
+	$icut = 2;
+	push(@ids,$F[1]);
+	push(@bams,$F[$#F]);
+    }
+    else {
+	die "Expected number of columns are 2 or 5\n";
+    }
+
+    ## check if required files exist
+    die "Cannot open $F[$#F] for reading\n" unless ( -s $F[$#F] );
+}
+close IN;
+
+open(MAK,">$out.Makefile") || die "Cannot open Makefile $out.Makefile for writing\n";
+print MAK ".DELETE_ON_ERROR:\n\n";
+print MAK "all: $out.ped\n\n";
+print MAK "$out.ped:";
+for(my $i=0; $i < @ids; ++$i) {
+    print MAK " $out.$ids[$i].txt.gz.tbi";
+}
+print MAK "\n";
+print MAK "\t(echo \"#FAM_ID\tIND_ID\tFAT_ID\tMOT_ID\tSEX\tMPU\"; cut -f $icut $index | perl -lane 'print join(\"\\t\",\$\$F[0],\$\$F[0],0,0,0,\"$out.\".\$\$F[0].\".txt.gz\")') > $out.ped\n\n";
+for(my $i=0; $i < @ids; ++$i) {
+    print MAK "$out.$ids[$i].txt.gz.tbi: $bams[$i]\n";
+    my $cmd = "set -o pipefail; $samtools view $viewParam -uh $bams[$i] $region | ".($baqParam ? "$samtools calmd -AEbr - $ref | " : "").($clipOverlap ? "$bamutil clipOverlap --in -.bam --out -.ubam | " : "")." $samtools mpileup ".($ignoreMQ ? "" : " -s").($ignoreCycle ? "" : " -O")." -f $ref -d $maxDepth -l $loci - | $bgzip -c > $out.$ids[$i].txt.gz";
+    print MAK "\t".&mosixCmd("$cmd",$mosixNodes)."\n";
+    print MAK "\t".&mosixCmd("$tabix -f -s 1 -b 2 -e 2 $out.$ids[$i].txt.gz",$mosixNodes)."\n\n";
+}
+close MAK;
+
+print "Finished generating CAPT Makefile\n";
+if ( $run < 0 ) {
+    print "CAPT will run the with the following commond:\n";
+    print "\tmake -f $out.Makefile -j [# of parallel jobs]\n";
+    print "Or perform sanity checking using the following command:\n";
+    print "\tmake -f $out.Makefile -n\n";
+}
+elsif ( $run == 0 ) {
+    print "Running maximum parallel jobs of CAPT\n";
+    my $cmd = "make -f $out.Makefile -j ".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
+else {
+    print "Running $run parallel jobs of CAPT\n";
+    my $cmd = "make -f $out.Makefile -j $run".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
+
+sub mosixCmd {
+    my ($cmd,$nodes) = @_;
+    if ( $nodes ) { return "mosbatch -E/tmp -j$nodes bash -c '$cmd'"; }
+    else { return $cmd; }
+}
+
+sub checkBinary {
+    my $cmd = shift;
+    my $out = `which $cmd`;
+    return ( ( $out ) ? 1 : 0 );
+}

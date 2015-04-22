@@ -1,0 +1,101 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Cwd;
+use FindBin;
+use lib "$FindBin::Bin";
+use wGetOptions qw(wpod2usage wGetOptions);
+
+my $index = "";
+my $out = "";
+my $vcf = "";
+my $minMAF = 0.01;
+my $minCallRate = 0.95;
+my $maxDepth = 20;
+my $precise = "";
+my $run = -1;
+my $restart = "";
+
+## Parse options and print usage if there is a syntax error,
+## or if usage was explicitly requested.
+wGetOptions("-Run contamination detection algorithm on pileup data",
+	    "--Required Options",
+	    "index=s", [\$index,"Index file containing sample IDs and MPU (mpileup) file path"],
+	    "out=s", [\$out,"Output prefix"],
+	    "vcf=s", [\$vcf,"Input VCF file"],
+	    "--Additional Options",
+	    "min-maf=f", [\$minMAF,"Minimum minor allele frequency"],
+	    "min-callrate=f", [\$minCallRate,"Minimum call rate"],
+	    "max-depth=i", [\$maxDepth,"Maximum depth cap"],
+	    "precise", [\$precise,"Use precise (slower) calculation of likelihoods - recommended for high coverage data when max-depth is >20x"],
+	    "run=i", [\$run,"Number of jobs to run in parallel"],
+	    "restart", [\$restart,"Restart jobs ignoring previous outputs"],
+    ) || wpod2usage(2);
+
+my $bindir = "$FindBin::Bin";
+
+unless ( ( $vcf ) && ( $index ) && ( $out ) ) {
+    print STDERR "ERROR: Missing required option\n";
+    wpod2usage(2);
+}
+
+die "Cannot open $vcf for reading\n" unless ( -s $vcf );
+
+my @ids = ();
+my @mpus = ();
+open(IN,$index) || die "Cannot open file\n";
+while(<IN>) {
+    next if ( /^#/ );
+    my @F = split;
+    if ( $#F == 1 ) {
+	push(@ids,$F[0]);
+	push(@mpus,$F[1]);
+    }
+    elsif ( $#F == 5 ) {
+	push(@ids,$F[1]);
+	push(@mpus,$F[$#F]);
+    }
+    else {
+	die "Expected number of columns are 2 or 5\n";
+    }
+
+    ## check if required files exist
+    die "Cannot open $F[$#F] for reading\n" unless ( -s $F[$#F] );
+    die "Cannot open $F[$#F].tbi for reading\n" unless ( -s "$F[$#F].tbi" );
+}
+close IN;
+
+open(MAK,">$out.Makefile") || die "Cannot open file\n";
+print MAK ".DELETE_ON_ERROR:\n\n";
+print MAK "all: $out.ped\n\n";
+print MAK "$out.ped:";
+for(my $i=0; $i < @ids; ++$i) {
+    print MAK " $out.$ids[$i].selfSM";
+}
+print MAK "\n";
+print MAK "\t$bindir/cctools-verify-merge --out $out --index $index\n\n";
+for(my $i=0; $i < @ids; ++$i) {
+    print MAK "$out.$ids[$i].selfSM: $mpus[$i]\n";
+    print MAK "\t$bindir/cleanCall verify --vcf $vcf --minAF $minMAF --minCallRate $minCallRate --out $out.$ids[$i] --mpu $mpus[$i] --smID $ids[$i] --maxDepth $maxDepth ".($precise ? "--precise" : "")."\n\n";
+}
+close MAK;
+
+print "Finished generating CCTOOLS Makefile\n";
+if ( $run < 0 ) {
+    print "CCTOOLS will run the with the following commond:\n";
+    print "\tmake -f $out.Makefile -j [# of parallel jobs]\n";
+    print "Or perform sanity checking using the following command:\n";
+    print "\tmake -f $out.Makefile -n\n";
+}
+elsif ( $run == 0 ) {
+    print "Running maximum parallel jobs of CCTOOLS\n";
+    my $cmd = "make -f $out.Makefile -j ".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
+else {
+    print "Running $run parallel jobs of CCTOOLS\n";
+    my $cmd = "make -f $out.Makefile -j $run".(($restart) ? " -B" : "");
+    print "$cmd\n";
+    print `$cmd`;
+}
