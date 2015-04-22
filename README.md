@@ -1,5 +1,5 @@
 # cleanCall
-Correction for DNA contamination in genotype calling
+Correcting for DNA contamination in genotype calling
 
 ## Quick Start
    	git clone https://github.com/hyunminkang/cleancall.git
@@ -7,9 +7,15 @@ Correction for DNA contamination in genotype calling
    	./configure --prefix [/path/to/install]
    	make
    	make install
-   	[/path/to/install]/cctools pileup --loci [in.sites.vcf.gz] --index [index.file.with.sample.id.and.bam.file.txt] --out [output.pileup] --ref [ref.fa] --run [num.parallel.jobs]
-   	[/path/to/install]/cctools verify --index [output.pileup.ped] --out [output.verify] --vcf [in.sites.vcf.gz] --run [num.parallel.jobs]
-   	[/path/to/install]/cctools genotype --invcf [in.sites.vcf.gz] --ped [output.verify.ped] --out [output.genotype.vcf.gz] --ref [ref.fa] --run [num.parallel.jobs]
+   	[/path/to/install]/cctools pileup --loci [in.sites.vcf.gz] \\
+	     --index [index.file.with.sample.id.and.bam.file.txt] \\
+	     --out [output.pileup] --ref [ref.fa] --run [num.parallel.jobs]
+   	[/path/to/install]/cctools verify --index [output.pileup.ped] \\
+	     --out [output.verify] --vcf [in.sites.vcf.gz] \\
+	     --run [num.parallel.jobs]
+   	[/path/to/install]/cctools genotype --invcf [in.sites.vcf.gz] \\
+	     --ped [output.verify.ped] --out [output.genotype.vcf.gz] \\
+	     --ref [ref.fa] --run [num.parallel.jobs]
 
 ## Introduction
 
