@@ -26,3 +26,10 @@
 *.exe
 *.out
 *.app
+src/cleanCall
+src/tabix
+src/bgzip
+
+# Automake related
+autom4te.cache
+autom4te.cache/*
