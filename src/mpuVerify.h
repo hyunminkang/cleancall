@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <fstream>
+#include <sstream>
+#include <set>
 #include "MathGold.h"
 #include "mpuFile.h"
 #include "mpuPileBases.h"
@@ -15,6 +18,7 @@
 class mpuVerifyArgs {
 public:
   std::string sSubsetInds;
+  std::string sSubsetSites;
   std::string sVcfFile;
   std::string sMpuFile;
   std::string sOutFile;
@@ -120,7 +124,7 @@ public:
   std::vector<uint8_t> genotypes;
   int bytesPerMarker;
 
-  GenMatrixBinary(const char* vcfFile, bool siteOnly, bool findBest, std::vector<std::string>& subsetInds, double minAF, double minCallRate);
+  GenMatrixBinary(const char* vcfFile, bool siteOnly, bool findBest, std::vector<std::string>& subsetInds, std::set<std::string>& subsetSites, double minAF, double minCallRate);
   int addMarker(const char* chrom, int position, char refBase, char altBase, double alleleFreq);
   void setGenotype(float genotype, int indIndex, int markerIndex = -1);
   int getGenotype(int indIndex, int markerIndex);
@@ -169,6 +173,7 @@ class mpuVerify {
   bool inferProbRefs;
   double pSN[6]; // pSN[i*3+j] == Pr(Sampled=i|True=j,H0); 0(REF), 1(ALT), 2(others)
   std::vector<std::string> subsetInds;
+  std::set<std::string> subsetSites;
   double fPhred2Err[MAX_Q+1];
 
   static double logit(double p) { return log(p/(1.-p)); }
@@ -198,6 +203,7 @@ class mpuVerify {
     }
     nMarkers = nBases = 0;
     subsetInds.clear();
+    subsetSites.clear();
   }
 
   ~mpuVerify() {
@@ -223,7 +229,8 @@ class mpuVerify {
     //pSN[2*3+0] = pSN[2*3+1] = pSN[2*3+2] = 0;
   }
 
-  void loadSubsetInds(const char* subsetFile);
+  int  loadSubsetInds(const char* subsetFile);
+  int  loadSubsetSites(const char* subsetFile);
   void loadFiles(const char* mpuFile, const char* vcfFile);
 
   double computeMixLLKs(double fMix);
