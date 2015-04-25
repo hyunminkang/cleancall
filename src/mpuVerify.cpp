@@ -1,9 +1,8 @@
 #include "mpuVerify.h"
 #include "fVcf.h"
 
-#include <set>
 
-GenMatrixBinary::GenMatrixBinary(const char* vcfFile, bool siteOnly, bool findBest, std::vector<std::string>& subsetInds, double minAF, double minCallRate) {
+GenMatrixBinary::GenMatrixBinary(const char* vcfFile, bool siteOnly, bool findBest, std::vector<std::string>& subsetInds, std::set<std::string>& subsetSites, double minAF, double minCallRate) {
   // open a VCF file
   fVcf tvcf;
   tvcf.infoAF = ( siteOnly || ( ( subsetInds.size() <= 1 ) && !findBest ) );
@@ -38,17 +37,21 @@ GenMatrixBinary::GenMatrixBinary(const char* vcfFile, bool siteOnly, bool findBe
     M += tvcf.nMarkers;
     fprintf(stderr,"Processing %d markers across %d individuals..\n", M, tvcf.nInds);
     for(i=0, m=0; i < tvcf.nMarkers; ++i) { // for each marker
-      af = tvcf.alleleFreq(i);
-      maf = af > 0.5 ? 1-af : af;
-      if ( ( maf >= minAF ) && 
-	   ( tvcf.callRate(i) >= minCallRate ) ) {
-	addMarker(tvcf.chroms[i].c_str(), tvcf.pos1s[i], tvcf.refs[i][0], tvcf.alts[i][0], af);
-	for(int j=0; j < tvcf.nInds; ++j) {
-	  setGenotype( tvcf.genos[i*tvcf.nInds + j], j, m );
-	}
-	++m;
+	  std::ostringstream chrompos;
+	  chrompos << tvcf.chroms[i] << "\t" << tvcf.pos1s[i];
+	  if(subsetSites.empty() || subsetSites.find(chrompos.str()) != subsetSites.end() ) {
+		  af = tvcf.alleleFreq(i);
+		  maf = af > 0.5 ? 1-af : af;
+		  if ( ( maf >= minAF ) && 
+		   ( tvcf.callRate(i) >= minCallRate ) ) {
+		addMarker(tvcf.chroms[i].c_str(), tvcf.pos1s[i], tvcf.refs[i][0], tvcf.alts[i][0], af);
+		for(int j=0; j < tvcf.nInds; ++j) {
+		  setGenotype( tvcf.genos[i*tvcf.nInds + j], j, m );
+		}
+		++m;
+		  }
       }
-    }
+	}
   }
 }
 
@@ -79,6 +82,38 @@ void GenMatrixBinary::setGenotype(float geno, int indIndex, int markerIndex) {
   int genoIndex = (chroms.size()-1) * bytesPerMarker + (indIndex / 4);
   int shift = ((indIndex % 4) * 2);
   genotypes[genoIndex] |= (ngeno << shift);
+}
+
+//NOTE: Each line must exactly match header of VCF
+// No other columns are allowed
+int mpuVerify::loadSubsetInds(const char* subsetfile) {
+	std::ifstream in(subsetfile);
+	std::string tmp;
+	if(!in) {
+		error("could not open --subset file");
+	}
+	while(!in.eof()) {
+		getline(in, tmp);
+		subsetInds.push_back(tmp);
+	}
+	in.close();
+	return subsetInds.size();
+}
+
+//NOTE: Each line of sites file must be "chr<tab>pos"
+// No other columns are allowed
+int mpuVerify::loadSubsetSites(const char* subsetfile) {
+	std::ifstream in(subsetfile);
+	std::string tmp;
+	if(!in) {
+		error("could not open --sites file");
+	}
+	while(!in.eof()) {
+		getline(in, tmp);
+		subsetSites.insert(tmp);
+	}
+	in.close();
+	return subsetSites.size();
 }
 
 void mpuVerify::loadFiles(const char* mpuFile, const char* vcfFile) {
@@ -114,9 +149,10 @@ void mpuVerify::loadFiles(const char* mpuFile, const char* vcfFile) {
     error("None of --site, --self, --best option was set");
   }
 
+
   notice("Opening VCF file %s",vcfFile);
   // create genotype matrix, and load vcfFile
-  pGenotypes = new GenMatrixBinary(vcfFile, pArgs->bSiteOnly, pArgs->bFindBest, subsetInds, pArgs->minAF, pArgs->minCallRate);
+  pGenotypes = new GenMatrixBinary(vcfFile, pArgs->bSiteOnly, pArgs->bFindBest, subsetInds, subsetSites, pArgs->minAF, pArgs->minCallRate);
 
   notice("Reading MPU file %s",mpuFile);
   // read base information corresponding to each marker

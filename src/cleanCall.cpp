@@ -413,6 +413,7 @@ int runVerify(int argc, char** argv) {
     LONG_STRINGPARAMETER("vcf",&args.sVcfFile)
     LONG_STRINGPARAMETER("mpu",&args.sMpuFile)
     LONG_STRINGPARAMETER("subset",&args.sSubsetInds)
+    LONG_STRINGPARAMETER("sites",&args.sSubsetSites)
     LONG_STRINGPARAMETER("smID",&args.sSMID)
     LONG_STRINGPARAMETER("scanPair",&args.sScanPair)
 
@@ -511,6 +512,17 @@ int runVerify(int argc, char** argv) {
 
   // load arguments
   mpuVerify vbid(&args);
+
+  //load individuals
+  if ( ! (args.sSubsetInds.empty() ) ) {
+	notice("Reading subset file");
+	notice(" > %i individual(s) read", vbid.loadSubsetInds(args.sSubsetInds.c_str()));
+  }
+  //load sites
+  if ( ! (args.sSubsetSites.empty() ) ) {
+    notice("Readings sites file");
+	notice(" > %i site(s) read", vbid.loadSubsetSites(args.sSubsetSites.c_str()));
+  }
 
   // load input VCF and BAM files
   notice("Opening Input Files");
