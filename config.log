@@ -333,56 +333,56 @@ configure:7927: $? = 0
 configure:7927: result: yes
 configure:8144: checking for objdir
 configure:8159: result: .libs
-configure:8426: checking if gcc supports -fno-rtti -fno-exceptions
-configure:8444: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
+configure:8430: checking if gcc supports -fno-rtti -fno-exceptions
+configure:8448: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C [enabled by default]
-configure:8448: $? = 0
-configure:8461: result: no
-configure:8788: checking for gcc option to produce PIC
-configure:8795: result: -fPIC -DPIC
-configure:8803: checking if gcc PIC flag -fPIC -DPIC works
-configure:8821: gcc -c -g -O2  -fPIC -DPIC -DPIC conftest.c >&5
-configure:8825: $? = 0
-configure:8838: result: yes
-configure:8867: checking if gcc static flag -static works
-configure:8895: result: yes
-configure:8910: checking if gcc supports -c -o file.o
-configure:8931: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
-configure:8935: $? = 0
-configure:8957: result: yes
-configure:8965: checking if gcc supports -c -o file.o
-configure:9012: result: yes
-configure:9045: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
-configure:10202: result: yes
-configure:10239: checking whether -lc should be explicitly linked in
-configure:10247: gcc -c -g -O2  conftest.c >&5
-configure:10250: $? = 0
-configure:10265: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /bin/grep  -lc  \>/dev/null 2\>\&1
-configure:10268: $? = 0
-configure:10282: result: no
-configure:10442: checking dynamic linker characteristics
-configure:10953: gcc -o conftest -g -O2   -Wl,-rpath -Wl,/foo conftest.c  >&5
-configure:10953: $? = 0
-configure:11187: result: GNU/Linux ld.so
-configure:11294: checking how to hardcode library paths into programs
-configure:11319: result: immediate
-configure:11859: checking whether stripping libraries is possible
-configure:11864: result: yes
-configure:11899: checking if libtool supports shared libraries
-configure:11901: result: yes
-configure:11904: checking whether to build shared libraries
-configure:11925: result: yes
-configure:11928: checking whether to build static libraries
-configure:11932: result: yes
-configure:11955: checking how to run the C++ preprocessor
-configure:11982: g++ -E  conftest.cpp
-configure:11982: $? = 0
-configure:11996: g++ -E  conftest.cpp
+configure:8452: $? = 0
+configure:8465: result: no
+configure:8792: checking for gcc option to produce PIC
+configure:8799: result: -fPIC -DPIC
+configure:8807: checking if gcc PIC flag -fPIC -DPIC works
+configure:8825: gcc -c -g -O2  -fPIC -DPIC -DPIC conftest.c >&5
+configure:8829: $? = 0
+configure:8842: result: yes
+configure:8871: checking if gcc static flag -static works
+configure:8899: result: yes
+configure:8914: checking if gcc supports -c -o file.o
+configure:8935: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
+configure:8939: $? = 0
+configure:8961: result: yes
+configure:8969: checking if gcc supports -c -o file.o
+configure:9016: result: yes
+configure:9049: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:10206: result: yes
+configure:10243: checking whether -lc should be explicitly linked in
+configure:10251: gcc -c -g -O2  conftest.c >&5
+configure:10254: $? = 0
+configure:10269: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /bin/grep  -lc  \>/dev/null 2\>\&1
+configure:10272: $? = 0
+configure:10286: result: no
+configure:10446: checking dynamic linker characteristics
+configure:10957: gcc -o conftest -g -O2   -Wl,-rpath -Wl,/foo conftest.c  >&5
+configure:10957: $? = 0
+configure:11191: result: GNU/Linux ld.so
+configure:11298: checking how to hardcode library paths into programs
+configure:11323: result: immediate
+configure:11863: checking whether stripping libraries is possible
+configure:11868: result: yes
+configure:11903: checking if libtool supports shared libraries
+configure:11905: result: yes
+configure:11908: checking whether to build shared libraries
+configure:11929: result: yes
+configure:11932: checking whether to build static libraries
+configure:11936: result: yes
+configure:11959: checking how to run the C++ preprocessor
+configure:11986: g++ -E  conftest.cpp
+configure:11986: $? = 0
+configure:12000: g++ -E  conftest.cpp
 conftest.cpp:21:28: fatal error: ac_nonexistent.h: No such file or directory
  #include <ac_nonexistent.h>
                             ^
 compilation terminated.
-configure:11996: $? = 1
+configure:12000: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -405,15 +405,15 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:12021: result: g++ -E
-configure:12041: g++ -E  conftest.cpp
-configure:12041: $? = 0
-configure:12055: g++ -E  conftest.cpp
+configure:12025: result: g++ -E
+configure:12045: g++ -E  conftest.cpp
+configure:12045: $? = 0
+configure:12059: g++ -E  conftest.cpp
 conftest.cpp:21:28: fatal error: ac_nonexistent.h: No such file or directory
  #include <ac_nonexistent.h>
                             ^
 compilation terminated.
-configure:12055: $? = 1
+configure:12059: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -436,47 +436,47 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:12224: checking for ld used by g++
-configure:12291: result: /usr/bin/ld -m elf_x86_64
-configure:12298: checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld
-configure:12313: result: yes
-configure:12368: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
-configure:13373: result: yes
-configure:13409: g++ -c -g -O2  conftest.cpp >&5
-configure:13412: $? = 0
-configure:13932: checking for g++ option to produce PIC
-configure:13939: result: -fPIC -DPIC
-configure:13947: checking if g++ PIC flag -fPIC -DPIC works
-configure:13965: g++ -c -g -O2  -fPIC -DPIC -DPIC conftest.cpp >&5
-configure:13969: $? = 0
-configure:13982: result: yes
-configure:14005: checking if g++ static flag -static works
-configure:14033: result: yes
-configure:14045: checking if g++ supports -c -o file.o
-configure:14066: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
-configure:14070: $? = 0
-configure:14092: result: yes
-configure:14097: checking if g++ supports -c -o file.o
-configure:14144: result: yes
-configure:14174: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
-configure:14213: result: yes
-configure:14354: checking dynamic linker characteristics
-configure:15033: result: GNU/Linux ld.so
-configure:15086: checking how to hardcode library paths into programs
-configure:15111: result: immediate
-configure:15175: checking for stdbool.h that conforms to C99
-configure:15242: gcc -c -g -O2  conftest.c >&5
-configure:15242: $? = 0
-configure:15249: result: yes
-configure:15251: checking for _Bool
-configure:15251: gcc -c -g -O2  conftest.c >&5
-configure:15251: $? = 0
-configure:15251: gcc -c -g -O2  conftest.c >&5
+configure:12228: checking for ld used by g++
+configure:12295: result: /usr/bin/ld -m elf_x86_64
+configure:12302: checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld
+configure:12317: result: yes
+configure:12372: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:13377: result: yes
+configure:13413: g++ -c -g -O2  conftest.cpp >&5
+configure:13416: $? = 0
+configure:13936: checking for g++ option to produce PIC
+configure:13943: result: -fPIC -DPIC
+configure:13951: checking if g++ PIC flag -fPIC -DPIC works
+configure:13969: g++ -c -g -O2  -fPIC -DPIC -DPIC conftest.cpp >&5
+configure:13973: $? = 0
+configure:13986: result: yes
+configure:14009: checking if g++ static flag -static works
+configure:14037: result: yes
+configure:14049: checking if g++ supports -c -o file.o
+configure:14070: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
+configure:14074: $? = 0
+configure:14096: result: yes
+configure:14101: checking if g++ supports -c -o file.o
+configure:14148: result: yes
+configure:14178: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:14217: result: yes
+configure:14358: checking dynamic linker characteristics
+configure:15037: result: GNU/Linux ld.so
+configure:15090: checking how to hardcode library paths into programs
+configure:15115: result: immediate
+configure:15179: checking for stdbool.h that conforms to C99
+configure:15246: gcc -c -g -O2  conftest.c >&5
+configure:15246: $? = 0
+configure:15253: result: yes
+configure:15255: checking for _Bool
+configure:15255: gcc -c -g -O2  conftest.c >&5
+configure:15255: $? = 0
+configure:15255: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:57:20: error: expected expression before ')' token
  if (sizeof ((_Bool)))
                     ^
-configure:15251: $? = 1
+configure:15255: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -539,15 +539,15 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15251: result: yes
-configure:15267: checking for inline
-configure:15283: gcc -c -g -O2  conftest.c >&5
-configure:15283: $? = 0
-configure:15291: result: inline
-configure:15309: checking for int32_t
-configure:15309: gcc -c -g -O2  conftest.c >&5
-configure:15309: $? = 0
-configure:15309: gcc -c -g -O2  conftest.c >&5
+configure:15255: result: yes
+configure:15271: checking for inline
+configure:15287: gcc -c -g -O2  conftest.c >&5
+configure:15287: $? = 0
+configure:15295: result: inline
+configure:15313: checking for int32_t
+configure:15313: gcc -c -g -O2  conftest.c >&5
+configure:15313: $? = 0
+configure:15313: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:61:53: warning: integer overflow in expression [-Woverflow]
     < (int32_t) (((((int32_t) 1 << N) << N) - 1) * 2 + 2))];
@@ -555,7 +555,7 @@ conftest.c:61:53: warning: integer overflow in expression [-Woverflow]
 conftest.c:60:12: error: storage size of 'test_array' isn't constant
  static int test_array [1 - 2 * !((int32_t) (((((int32_t) 1 << N) << N) - 1) * 2 + 1)
             ^
-configure:15309: $? = 1
+configure:15313: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -623,11 +623,11 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15309: result: yes
-configure:15320: checking for int64_t
-configure:15320: gcc -c -g -O2  conftest.c >&5
-configure:15320: $? = 0
-configure:15320: gcc -c -g -O2  conftest.c >&5
+configure:15313: result: yes
+configure:15324: checking for int64_t
+configure:15324: gcc -c -g -O2  conftest.c >&5
+configure:15324: $? = 0
+configure:15324: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:61:53: warning: integer overflow in expression [-Woverflow]
     < (int64_t) (((((int64_t) 1 << N) << N) - 1) * 2 + 2))];
@@ -635,7 +635,7 @@ conftest.c:61:53: warning: integer overflow in expression [-Woverflow]
 conftest.c:60:12: error: storage size of 'test_array' isn't constant
  static int test_array [1 - 2 * !((int64_t) (((((int64_t) 1 << N) << N) - 1) * 2 + 1)
             ^
-configure:15320: $? = 1
+configure:15324: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -703,20 +703,20 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15320: result: yes
-configure:15331: checking for C/C++ restrict keyword
-configure:15356: gcc -c -g -O2  conftest.c >&5
-configure:15356: $? = 0
-configure:15364: result: __restrict
-configure:15377: checking for size_t
-configure:15377: gcc -c -g -O2  conftest.c >&5
-configure:15377: $? = 0
-configure:15377: gcc -c -g -O2  conftest.c >&5
+configure:15324: result: yes
+configure:15335: checking for C/C++ restrict keyword
+configure:15360: gcc -c -g -O2  conftest.c >&5
+configure:15360: $? = 0
+configure:15368: result: __restrict
+configure:15381: checking for size_t
+configure:15381: gcc -c -g -O2  conftest.c >&5
+configure:15381: $? = 0
+configure:15381: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:60:21: error: expected expression before ')' token
  if (sizeof ((size_t)))
                      ^
-configure:15377: $? = 1
+configure:15381: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -782,32 +782,32 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15377: result: yes
-configure:15388: checking for uint16_t
-configure:15388: gcc -c -g -O2  conftest.c >&5
-configure:15388: $? = 0
-configure:15388: result: yes
-configure:15400: checking for uint32_t
-configure:15400: gcc -c -g -O2  conftest.c >&5
-configure:15400: $? = 0
-configure:15400: result: yes
-configure:15414: checking for uint64_t
-configure:15414: gcc -c -g -O2  conftest.c >&5
-configure:15414: $? = 0
-configure:15414: result: yes
-configure:15428: checking for uint8_t
-configure:15428: gcc -c -g -O2  conftest.c >&5
-configure:15428: $? = 0
-configure:15428: result: yes
-configure:15442: checking for ptrdiff_t
-configure:15442: gcc -c -g -O2  conftest.c >&5
-configure:15442: $? = 0
-configure:15442: gcc -c -g -O2  conftest.c >&5
+configure:15381: result: yes
+configure:15392: checking for uint16_t
+configure:15392: gcc -c -g -O2  conftest.c >&5
+configure:15392: $? = 0
+configure:15392: result: yes
+configure:15404: checking for uint32_t
+configure:15404: gcc -c -g -O2  conftest.c >&5
+configure:15404: $? = 0
+configure:15404: result: yes
+configure:15418: checking for uint64_t
+configure:15418: gcc -c -g -O2  conftest.c >&5
+configure:15418: $? = 0
+configure:15418: result: yes
+configure:15432: checking for uint8_t
+configure:15432: gcc -c -g -O2  conftest.c >&5
+configure:15432: $? = 0
+configure:15432: result: yes
+configure:15446: checking for ptrdiff_t
+configure:15446: gcc -c -g -O2  conftest.c >&5
+configure:15446: $? = 0
+configure:15446: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:60:24: error: expected expression before ')' token
  if (sizeof ((ptrdiff_t)))
                         ^
-configure:15442: $? = 1
+configure:15446: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -873,54 +873,54 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15442: result: yes
-configure:15454: checking for error_at_line
-configure:15470: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15470: $? = 0
-configure:15478: result: yes
-configure:15491: checking for stdlib.h
-configure:15491: result: yes
-configure:15501: checking for GNU libc compatible malloc
-configure:15525: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15525: $? = 0
-configure:15525: ./conftest
-configure:15525: $? = 0
-configure:15535: result: yes
-configure:15556: checking whether sys/types.h defines makedev
-configure:15572: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15572: $? = 0
-configure:15581: result: yes
-configure:15608: checking for stdlib.h
-configure:15608: result: yes
-configure:15618: checking for GNU libc compatible realloc
-configure:15642: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15642: $? = 0
-configure:15642: ./conftest
-configure:15642: $? = 0
-configure:15652: result: yes
-configure:15673: checking for working strtod
-configure:15714: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15446: result: yes
+configure:15458: checking for error_at_line
+configure:15474: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15474: $? = 0
+configure:15482: result: yes
+configure:15495: checking for stdlib.h
+configure:15495: result: yes
+configure:15505: checking for GNU libc compatible malloc
+configure:15529: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15529: $? = 0
+configure:15529: ./conftest
+configure:15529: $? = 0
+configure:15539: result: yes
+configure:15560: checking whether sys/types.h defines makedev
+configure:15576: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15576: $? = 0
+configure:15585: result: yes
+configure:15612: checking for stdlib.h
+configure:15612: result: yes
+configure:15622: checking for GNU libc compatible realloc
+configure:15646: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15646: $? = 0
+configure:15646: ./conftest
+configure:15646: $? = 0
+configure:15656: result: yes
+configure:15677: checking for working strtod
+configure:15718: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c: In function 'main':
 conftest.c:84:12: warning: ignoring return value of 'strtod', declared with attribute warn_unused_result [-Wunused-result]
      strtod (string, &term);
             ^
-configure:15714: $? = 0
-configure:15714: ./conftest
-configure:15714: $? = 0
-configure:15724: result: yes
-configure:15786: checking for _LARGEFILE_SOURCE value needed for large files
-configure:15805: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15805: $? = 0
-configure:15833: result: no
-configure:15854: checking for int16_t
-configure:15854: gcc -c -g -O2  conftest.c >&5
-configure:15854: $? = 0
-configure:15854: gcc -c -g -O2  conftest.c >&5
+configure:15718: $? = 0
+configure:15718: ./conftest
+configure:15718: $? = 0
+configure:15728: result: yes
+configure:15790: checking for _LARGEFILE_SOURCE value needed for large files
+configure:15809: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15809: $? = 0
+configure:15837: result: no
+configure:15858: checking for int16_t
+configure:15858: gcc -c -g -O2  conftest.c >&5
+configure:15858: $? = 0
+configure:15858: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:67:12: error: size of array 'test_array' is negative
  static int test_array [1 - 2 * !((int16_t) (((((int16_t) 1 << N) << N) - 1) * 2 + 1)
             ^
-configure:15854: $? = 1
+configure:15858: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -995,16 +995,16 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15854: result: yes
-configure:15865: checking for int8_t
-configure:15865: gcc -c -g -O2  conftest.c >&5
-configure:15865: $? = 0
-configure:15865: gcc -c -g -O2  conftest.c >&5
+configure:15858: result: yes
+configure:15869: checking for int8_t
+configure:15869: gcc -c -g -O2  conftest.c >&5
+configure:15869: $? = 0
+configure:15869: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:67:12: error: size of array 'test_array' is negative
  static int test_array [1 - 2 * !((int8_t) (((((int8_t) 1 << N) << N) - 1) * 2 + 1)
             ^
-configure:15865: $? = 1
+configure:15869: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1079,16 +1079,16 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15865: result: yes
-configure:15876: checking for off_t
-configure:15876: gcc -c -g -O2  conftest.c >&5
-configure:15876: $? = 0
-configure:15876: gcc -c -g -O2  conftest.c >&5
+configure:15869: result: yes
+configure:15880: checking for off_t
+configure:15880: gcc -c -g -O2  conftest.c >&5
+configure:15880: $? = 0
+configure:15880: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:66:20: error: expected expression before ')' token
  if (sizeof ((off_t)))
                     ^
-configure:15876: $? = 1
+configure:15880: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1160,16 +1160,16 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15876: result: yes
-configure:15887: checking for ssize_t
-configure:15887: gcc -c -g -O2  conftest.c >&5
-configure:15887: $? = 0
-configure:15887: gcc -c -g -O2  conftest.c >&5
+configure:15880: result: yes
+configure:15891: checking for ssize_t
+configure:15891: gcc -c -g -O2  conftest.c >&5
+configure:15891: $? = 0
+configure:15891: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:66:22: error: expected expression before ')' token
  if (sizeof ((ssize_t)))
                       ^
-configure:15887: $? = 1
+configure:15891: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1241,16 +1241,16 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15887: result: yes
-configure:15901: checking for floor
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15891: result: yes
+configure:15905: checking for floor
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:53:6: warning: conflicting types for built-in function 'floor' [enabled by default]
  char floor ();
       ^
-/tmp/ccTNbK3D.o: In function `main':
+/tmp/cc8Jnk11.o: In function `main':
 /home/hmkang/code/working/cleancall/conftest.c:64: undefined reference to `floor'
 collect2: error: ld returned 1 exit status
-configure:15901: $? = 1
+configure:15905: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1319,27 +1319,27 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15901: result: no
-configure:15901: checking for gethostname
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for memset
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: result: no
+configure:15905: checking for gethostname
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for memset
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:54:6: warning: conflicting types for built-in function 'memset' [enabled by default]
  char memset ();
       ^
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for pow
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for pow
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:55:6: warning: conflicting types for built-in function 'pow' [enabled by default]
  char pow ();
       ^
-/tmp/ccUk1wPK.o: In function `main':
+/tmp/ccCCB5ma.o: In function `main':
 /home/hmkang/code/working/cleancall/conftest.c:66: undefined reference to `pow'
 collect2: error: ld returned 1 exit status
-configure:15901: $? = 1
+configure:15905: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1410,20 +1410,20 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15901: result: no
-configure:15901: checking for select
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for sqrt
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: result: no
+configure:15905: checking for select
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for sqrt
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:56:6: warning: conflicting types for built-in function 'sqrt' [enabled by default]
  char sqrt ();
       ^
-/tmp/ccCIDUDT.o: In function `main':
+/tmp/ccJAoxNh.o: In function `main':
 /home/hmkang/code/working/cleancall/conftest.c:67: undefined reference to `sqrt'
 collect2: error: ld returned 1 exit status
-configure:15901: $? = 1
+configure:15905: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "cleanCall"
@@ -1495,125 +1495,125 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:15901: result: no
-configure:15901: checking for strchr
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: result: no
+configure:15905: checking for strchr
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:56:6: warning: conflicting types for built-in function 'strchr' [enabled by default]
  char strchr ();
       ^
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for strstr
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for strstr
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:57:6: warning: conflicting types for built-in function 'strstr' [enabled by default]
  char strstr ();
       ^
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for strtol
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for gethostbyaddr
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for gethostbyname
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for getpagesize
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for socket
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for strdup
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for strtol
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for gethostbyaddr
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for gethostbyname
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for getpagesize
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for socket
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for strdup
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c:63:6: warning: conflicting types for built-in function 'strdup' [enabled by default]
  char strdup ();
       ^
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15901: checking for strerror
-configure:15901: gcc -o conftest -g -O2   conftest.c  >&5
-configure:15901: $? = 0
-configure:15901: result: yes
-configure:15910: checking for gzopen in -lz
-configure:15935: gcc -o conftest -g -O2   conftest.c -lz   >&5
-configure:15935: $? = 0
-configure:15944: result: yes
-configure:15960: checking limits.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking limits.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for limits.h
-configure:15960: result: yes
-configure:15960: checking stddef.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking stddef.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for stddef.h
-configure:15960: result: yes
-configure:15960: checking for stdint.h
-configure:15960: result: yes
-configure:15960: checking for stdlib.h
-configure:15960: result: yes
-configure:15960: checking for string.h
-configure:15960: result: yes
-configure:15960: checking for unistd.h
-configure:15960: result: yes
-configure:15960: checking arpa/inet.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking arpa/inet.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for arpa/inet.h
-configure:15960: result: yes
-configure:15960: checking fcntl.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking fcntl.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for fcntl.h
-configure:15960: result: yes
-configure:15960: checking netdb.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking netdb.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for netdb.h
-configure:15960: result: yes
-configure:15960: checking sys/socket.h usability
-configure:15960: gcc -c -g -O2  conftest.c >&5
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking sys/socket.h presence
-configure:15960: gcc -E  conftest.c
-configure:15960: $? = 0
-configure:15960: result: yes
-configure:15960: checking for sys/socket.h
-configure:15960: result: yes
-configure:16105: creating ./config.status
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15905: checking for strerror
+configure:15905: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15905: $? = 0
+configure:15905: result: yes
+configure:15914: checking for gzopen in -lz
+configure:15939: gcc -o conftest -g -O2   conftest.c -lz   >&5
+configure:15939: $? = 0
+configure:15948: result: yes
+configure:15964: checking limits.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking limits.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for limits.h
+configure:15964: result: yes
+configure:15964: checking stddef.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking stddef.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for stddef.h
+configure:15964: result: yes
+configure:15964: checking for stdint.h
+configure:15964: result: yes
+configure:15964: checking for stdlib.h
+configure:15964: result: yes
+configure:15964: checking for string.h
+configure:15964: result: yes
+configure:15964: checking for unistd.h
+configure:15964: result: yes
+configure:15964: checking arpa/inet.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking arpa/inet.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for arpa/inet.h
+configure:15964: result: yes
+configure:15964: checking fcntl.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking fcntl.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for fcntl.h
+configure:15964: result: yes
+configure:15964: checking netdb.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking netdb.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for netdb.h
+configure:15964: result: yes
+configure:15964: checking sys/socket.h usability
+configure:15964: gcc -c -g -O2  conftest.c >&5
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking sys/socket.h presence
+configure:15964: gcc -E  conftest.c
+configure:15964: $? = 0
+configure:15964: result: yes
+configure:15964: checking for sys/socket.h
+configure:15964: result: yes
+configure:16109: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##

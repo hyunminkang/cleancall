@@ -16,7 +16,7 @@ my $ignoreMQ = "";
 my $ignoreCycle = "";
 my $run = -1;
 my $restart = "";
-my $samtools = "samtools";
+my $samtools = "$bindir/samtools";
 my $bamutil = "bam";
 my $tabix = "$bindir/tabix";
 my $bgzip = "$bindir/bgzip";
@@ -57,7 +57,7 @@ unless ( ( $loci ) && ($ref ) && ( $index ) && ( $out ) ) {
 
 
 if ( ( $clipOverlap ) && ( &checkBinary($bamutil) == 0 ) ) {
-    print STDERR "ERROR: bamUtil binary $bamutil cannot be found\n";
+    print STDERR "ERROR: bamUtil binary $bamutil cannot be found. Please see http://genome.sph.umich.edu/wiki/BamUtil for downloading and installing them\n";
     wpod2usage(2);    
 }
 
