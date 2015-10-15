@@ -34,3 +34,7 @@ The basic usage can be obtained by simply typing the command without any argumen
 #### What is the purpose of the VCF file given to the -loci argument to cctools-pileup? What sort of data should this contain?
 
 The variant site VCF file should contain VCF representing known common variant sites, such as HapMap, with allele frequency information available. For example, You can use HapMap3 variant sites available in our [GotCloud Repository](https://github.com/statgen/gotcloud/blob/master/test/chr20Ref/hapmap_3.3.b37.sites.chr20.vcf.gz)
+
+#### What is the format of `index.file.with.sample.id.and.bam.file.txt`?
+
+The format of index file is simply tab-delimited files with the first column as sample ID and second column as full path of the BAM file corresponding to the sample.
