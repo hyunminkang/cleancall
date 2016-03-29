@@ -184,6 +184,8 @@ double mpuVerify::computeMixLLKs(double fMix) { //{ double* rgLLKs) {
   double tmpf;
 
   for(int i=0; i < nMarkers; ++i) {
+    if ( ( (int32_t)pPile->nEnds[i] - (int32_t)pPile->nBegins[i] ) < pArgs->minFreeDepth ) continue; // skip the marker whose depth is less than minDepth
+    
     if ( fVcf::getChromosomeType(pGenotypes->chroms[i].c_str(), pGenotypes->positions[i]) != CT_AUTOSOME ) continue;
     af = pGenotypes->alleleFrequencies[i];
     // force allele-frequency as nonzero to avoid boundary conditions
@@ -274,6 +276,8 @@ double mpuVerify::computeIBDLLKs(double fIBD, int indIdx) {
   double tmpf;
 
   for(int i=0; i < nMarkers; ++i) {
+    if ( ( (int32_t)pPile->nEnds[i] - (int32_t)pPile->nBegins[i] ) < pArgs->minChipDepth ) continue; // skip the marker whose depth is less than minDepth
+    
     if ( fVcf::getChromosomeType(pGenotypes->chroms[i].c_str(), pGenotypes->positions[i]) != CT_AUTOSOME ) continue;
     af = pGenotypes->alleleFrequencies[i];
     // force allele-frequency as nonzero to avoid boundary conditions

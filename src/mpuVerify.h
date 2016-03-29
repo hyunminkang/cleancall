@@ -57,6 +57,8 @@ public:
 
   int minMapQ;
   int maxDepth;
+  int minFreeDepth;
+  int minChipDepth;
   int minQ;
   int maxQ;
 
@@ -98,6 +100,8 @@ public:
 
     minMapQ = 10;
     maxDepth = 20;
+    minFreeDepth = 2;
+    minChipDepth = 1;
     minQ = 13;
     maxQ = 40;
 

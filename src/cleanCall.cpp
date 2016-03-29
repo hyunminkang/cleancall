@@ -442,6 +442,8 @@ int runVerify(int argc, char** argv) {
     LONG_PARAMETER_GROUP("MPU analysis options")
     LONG_PARAMETER("precise",&args.bPrecise)
     LONG_INTPARAMETER("minMapQ",&args.minMapQ)
+    LONG_INTPARAMETER("minFreeDepth",&args.minFreeDepth)
+    LONG_INTPARAMETER("minChipDepth",&args.minChipDepth)        
     LONG_INTPARAMETER("maxDepth",&args.maxDepth)
     LONG_INTPARAMETER("minQ",&args.minQ)
     LONG_INTPARAMETER("maxQ",&args.maxQ)
