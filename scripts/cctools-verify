@@ -12,6 +12,10 @@ my $vcf = "";
 my $minMAF = 0.01;
 my $minCallRate = 0.95;
 my $maxDepth = 20;
+my $minFreeDepth = 2;
+my $minChipDepth = 1;
+my $sites = "";
+my $grid = 0;
 my $precise = "";
 my $run = -1;
 my $restart = "";
@@ -27,6 +31,10 @@ wGetOptions("-Run contamination detection algorithm on pileup data",
 	    "min-maf=f", [\$minMAF,"Minimum minor allele frequency"],
 	    "min-callrate=f", [\$minCallRate,"Minimum call rate"],
 	    "max-depth=i", [\$maxDepth,"Maximum depth cap"],
+	    "min-free-depth=i", [\$minFreeDepth,"Minimum depth for sites used for genotype-free estimation"],
+	    "min-chip-depth=i", [\$minChipDepth,"Minimum depth for sites used for estimation with gentoypes"],
+	    "sites=s", [\$sites, "Subset of chr/positions to analyze"],
+	    "grid=f", [\$grid, "Grid size used during first pass estimation"],
 	    "precise", [\$precise,"Use precise (slower) calculation of likelihoods - recommended for high coverage data when max-depth is >20x"],
 	    "run=i", [\$run,"Number of jobs to run in parallel"],
 	    "restart", [\$restart,"Restart jobs ignoring previous outputs"],
@@ -76,7 +84,7 @@ print MAK "\n";
 print MAK "\t$bindir/cctools-verify-merge --out $out --index $index\n\n";
 for(my $i=0; $i < @ids; ++$i) {
     print MAK "$out.$ids[$i].selfSM: $mpus[$i]\n";
-    print MAK "\t$bindir/cleanCall verify --vcf $vcf --minAF $minMAF --minCallRate $minCallRate --out $out.$ids[$i] --mpu $mpus[$i] --smID $ids[$i] --maxDepth $maxDepth ".($precise ? "--precise" : "")."\n\n";
+    print MAK "\t$bindir/cleanCall verify --vcf $vcf --minAF $minMAF --minCallRate $minCallRate --out $out.$ids[$i] --mpu $mpus[$i] --smID $ids[$i] --maxDepth $maxDepth --minChipDepth $minChipDepth --minFreeDepth $minFreeDepth ".($sites ? "--sites $sites": "").(($grid>0 and $grid<1) ? "--grid $grid" : "").($precise ? "--precise" : "")."\n\n";
 }
 close MAK;
 
