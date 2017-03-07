@@ -27,7 +27,9 @@ The basic usage can be obtained by simply typing the command without any argumen
 
 ## Citing cleanCall
 
-* G Jun, M Flickinger, KN Hetrick, JM Romm, KF Doheny, GR Abecasis, M Boehnke (2012) Detecting and estimating contamination of human DNA samples in sequencing and array-based genotype data, *The American Journal of Human Genetics* **91 (5)**, 839-848
+* Flickinger M, Jun G, Abecasis GR, Boehnke M, Kang HM. Am J Hum Genet. (2015) Correcting for Sample Contamination in Genotype Calling of DNA Sequence Data. *Am J Hum Genet* **97(2)**:284-90. doi: 10.1016/j.ajhg.2015.07.002.
+
+* Jun G, Flickinger M, Hetrick KN, Romm JM, Doheny KF, Abecasis GR, Boehnke M, Kang HM (2012) Detecting and estimating contamination of human DNA samples in sequencing and array-based genotype data, *Am J Hum Genet* **91 (5)**, 839-848
 
 ## Frequently Asked Questions (FAQs)
 
